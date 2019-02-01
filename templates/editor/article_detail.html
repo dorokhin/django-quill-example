@@ -1,0 +1,13 @@
+{% extends 'editor/base_.html' %}
+{% block content %}
+    <div class="ui main text container">
+        <h1 class="ui header">{{ object.title }}
+            {% if perms.editor.change_article %}
+                <a href="{% url 'editor:edit' object.pk %}" class="ui violet label">
+                    <i class="pencil icon"></i>Edit
+                </a>
+            {% endif %}
+        </h1>
+        <p>{{ object.content|safe }}</p>
+    </div>
+{% endblock %}

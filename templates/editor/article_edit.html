@@ -1,0 +1,25 @@
+{% extends 'editor/base_.html' %}
+{% load static %}
+{% block content %}
+
+    <div class="ui main text container">
+        <form action="{% url 'editor:edit' object.pk %}" method="post">
+            {% csrf_token %}
+            {{ form.errors }}
+            <div class="ui left corner labeled input fluid">
+              {{ form.title }}
+              <div class="ui left corner label">
+                <i class="asterisk icon"></i>
+              </div>
+            </div>
+            <div id="editor-container"> <p>{{ object.content|safe }}</p></div>
+            {{ form.content }}
+            <button type="submit" class="ui red basic button">Submit</button>
+        </form>
+    </div>
+
+{% endblock %}
+
+{% block extrajs %}
+    <script src="{% static 'editor/js/editor.js' %}"></script>
+{% endblock %}
