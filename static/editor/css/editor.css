@@ -1,0 +1,8 @@
+#editor-container {
+    height: 375px;
+}
+
+button[type=submit] {
+    margin: 20px!important;
+
+}

@@ -1,0 +1,22 @@
+{% extends 'editor/base_.html' %}
+{% block content %}
+    <div class="ui main text container">
+        <h1 class="ui header">Blog post list</h1>
+        <table class="ui purple table">
+            <thead>
+                <tr>
+                    <th>Article title</th>
+                    <th>Content</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for article in articles %}
+                    <tr>
+                        <td><a href="{% url 'editor:detail' article.pk %}">{{ article.title }}</a></td>
+                        <td>{{ article.content }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
