@@ -23,23 +23,30 @@
                 <a href="#" class="header item"><img class="logo" src="{% static 'editor/img/logo.png' %}">Superb blog</a>
                 <a href="{% url 'editor:list' %}" class="item">Home</a>
                 <a href="{% url 'editor:add' %}" class="item">Add</a>
-                <div class="ui simple dropdown item">
-                    Dropdown <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <a class="item" href="#">Link Item</a>
-                        <a class="item" href="#">Link Item</a>
-                        <div class="divider"></div>
-                        <div class="header">Header Item</div>
-                        <div class="item">
-                            <i class="dropdown icon"></i>Sub Menu
-                            <div class="menu">
-                                <a class="item" href="#">Link Item</a>
-                                <a class="item" href="#">Link Item</a>
+                {% if user.is_authenticated %}
+                    <div class="ui simple dropdown item ">
+                        @{{ user.username }}<i class="dropdown icon"></i>
+                        <div class="menu">
+                            {% if user.is_staff %}
+                                <a class="item" href="{% url 'admin:index' %}">Admin</a>
+                            {% endif %}
+
+                            <a class="item" href="#">Link Item</a>
+                            <div class="divider"></div>
+                            <div class="header">Header Item</div>
+                            <div class="item">
+                                <i class="dropdown icon"></i>Sub Menu
+                                <div class="menu">
+                                    <a class="item" href="#">Link Item</a>
+                                    <a class="item" href="#">Link Item</a>
+                                </div>
                             </div>
+                            <a class="item" href="#">Link Item</a>
                         </div>
-                        <a class="item" href="#">Link Item</a>
                     </div>
-                </div>
+                {% else %}
+                    <a href="{% url 'admin:login' %}?next=/" class="item">Login</a>
+                {% endif %}
             </div>
         </div>
         {% block content %}{% endblock %}
