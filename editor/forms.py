@@ -1,5 +1,5 @@
 from django.forms import ModelForm, HiddenInput, TextInput
-from .models import Article
+from .models import Article, Image
 
 
 class ArticleForm(ModelForm):
@@ -15,3 +15,8 @@ class ArticleForm(ModelForm):
         ]
         widgets = {'content': HiddenInput()}
 
+
+class ImageUploadForm(ModelForm):
+    class Meta:
+        model = Image
+        fields = ('file', )
