@@ -24,5 +24,6 @@ def get_file_name(instance, filename):
 
 
 class Image(models.Model):
-    post = models.ForeignKey(Article, default=None, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to=get_file_name, verbose_name='Image')
+    article = models.ForeignKey(Article, default=None, on_delete=models.CASCADE, blank=True, null=True)
+    file = models.ImageField(upload_to=get_file_name, verbose_name='Image')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
