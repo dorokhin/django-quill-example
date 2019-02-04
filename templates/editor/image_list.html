@@ -35,11 +35,17 @@
 
 
         <h1 class="ui header">Images</h1>
-        <div class="ui small images">
-            {% for image in images %}
-                <img src="{{ image.file.url }}">
-            {% endfor %}
-        </div>
+        {% if images %}
+            <div class="ui small images">
+                {% for image in images %}
+                    <img alt="image" src="{{ image.file.url }}">
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="ui middle aligned center aligned grid container">
+                <div class="ui fluid segment"><h3>No image to display</h3></div>
+            </div>
+        {% endif %}
 
         <!--- Pagination --->
 
