@@ -17,6 +17,19 @@ let quill = new Quill('#editor-container', {
   theme: 'snow',
 });
 
+var Image = Quill.import('formats/image');
+class ImageBlot extends Image {
+  static create(value) {
+    let node = super.create(value);
+    console.log(value);
+    node.classList.add('ui');
+    node.classList.add('fluid');
+    node.classList.add('image');
+    return node;
+  }
+}
+Quill.register(ImageBlot, true);
+
 
 let form = document.querySelector('form');
 form.onsubmit = function() {
@@ -26,28 +39,3 @@ form.onsubmit = function() {
 
     console.log("Submitted", $(form).serialize(), $(form).serializeArray());
 };
-
-var toolbar = quill.getModule('toolbar');
-toolbar.addHandler('image', imageHandler);
-
-
-function imageHandler(a, b) {
-    console.log(a, b);
-    var range = this.quill.getSelection();
-    var that = this;
-
-    var input = document.createElement('input');
-    input.type = 'file';
-
-    input.onchange = e => {
-       var file = e.target.files[0];
-       var reader = new FileReader();
-       reader.readAsDataURL(file);
-
-       reader.onload = readerEvent => {
-          var content = readerEvent.target.result;
-          that.quill.insertEmbed(range.index, 'image', content, Quill.sources.USER);
-       }
-    };
-    input.click();
-}
