@@ -1,0 +1,114 @@
+{% extends 'editor/base_.html' %}
+{% load static %}
+
+{% block extrastyle %}
+    <link rel="stylesheet" href="{% static 'editor/css/upload.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="ui main text container">
+
+        <div class="ui middle aligned center aligned grid container">
+            <div class="ui fluid segment">
+
+                <input name="file" type="file" class="inputfile" id="fileupload" multiple />
+
+                <label for="fileupload" class="ui huge green button"><i class="ui upload icon"></i>
+                    Upload image
+                </label>
+            </div>
+        </div>
+
+        <br>
+        <br>
+        <!-- The global progress bar -->
+        <div id="progress" class="ui active progress transition hidden">
+            <div class="bar">
+                <div class="progress"></div>
+            </div>
+            <div class="label">Uploading Files</div>
+        </div>
+
+        <!-- The container for the uploaded files -->
+        <div id="files" class="files"></div>
+        <br>
+
+
+        <h1 class="ui header">Images</h1>
+        {% if images %}
+            <div class="ui small images">
+                {% for image in images %}
+                    <img alt="image" src="{{ image.file.url }}">
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="ui middle aligned center aligned grid container">
+                <div class="ui fluid segment"><h3>No image to display</h3></div>
+            </div>
+        {% endif %}
+
+        <!--- Pagination --->
+
+        <div class="ui pagination menu">
+            <a href="?page=1" class="item {% if first_page %}disabled{% endif %}">&laquo First</a>
+
+            {% if images.has_previous %}
+                {% for page in prev_pages %}<a href="?page={{ page }}" class="item">{{ page }}</a>{% endfor %}
+            {% endif %}
+            <div class="disabled item">{{ current_page }}</div>
+
+            {% if images.has_next %}
+                {% for page in next_pages %}<a href="?page={{ page }}" class="item">{{ page }}</a>{% endfor %}
+            {% endif %}
+
+            <a href="?page={{ images.paginator.num_pages }}" class="item {% if last_page %}disabled{% endif %}">Last &raquo;</a>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block extrajs %}
+    <script src="{% static 'editor/js/jquery.ui.widget.js' %}"></script>
+    <script src="{% static 'editor/js/jquery.fileupload.js' %}"></script>
+    <script>
+
+        function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                }
+            }
+        });
+        $(function () {
+            'use strict';
+
+            $('#fileupload').fileupload({
+                url: {% url 'editor:upload_image' %},
+                dataType: 'json',
+                start: function () {
+                    console.log('upload started');
+                    $('.ui.progress').removeClass('hidden');
+                },
+                done: function (e, data) {
+                        console.log('Processing ' + data.result.url);
+
+                },
+                progressall: function (e, data) {
+                    var progress = parseInt(data.loaded / data.total * 100, 10);
+                    $('.ui.progress').progress('set progress', progress);
+
+                },
+                stop: function (e) {
+                    $(".ui.progress").delay(1000).queue(function(){
+                        $(this).addClass("hidden").dequeue();
+                    });
+                }
+            }).prop('disabled', !$.support.fileInput)
+                .parent().addClass($.support.fileInput ? undefined : 'disabled');
+        });
+    </script>
+{% endblock %}

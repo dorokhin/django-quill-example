@@ -1,0 +1,46 @@
+body {
+  background-color: #FFFFFF;
+}
+.ui.menu .item img.logo {
+  margin-right: 1.5em;
+}
+.main.container {
+  margin-top: 7em;
+}
+.wireframe {
+  margin-top: 2em;
+}
+.ui.footer.segment {
+  margin: 5em 0em 0em;
+  padding: 5em 0em;
+}
+#editor-container {
+    height: 375px;
+}
+
+button[type=submit] {
+    margin: 20px!important;
+
+}
+
+div .labeled {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+}
+
+.grid.container {
+  margin-top: 5em;
+}
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.ui.pagination.menu {
+	margin-top: 2em;
+	margin-bottom: 2em;
+}
