@@ -34,4 +34,41 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js"></script>
     <script src="//cdn.quilljs.com/1.3.6/quill.js"></script>
     <script src="{% static 'editor/js/editor.js' %}"></script>
+    <script>
+        var toolbar = quill.getModule('toolbar');
+        toolbar.addHandler('image', imageHandler);
+
+        function imageHandler(a, b) {
+            console.log(a, b);
+            var range = this.quill.getSelection();
+            var that = this;
+
+            var input = document.createElement('input');
+            input.type = 'file';
+
+            input.onchange = e => {
+                var file = e.target.files[0];
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = readerEvent => {
+                    var content = readerEvent.target.result;
+                    const fd = new FormData();
+                    fd.append("file", file);
+                    const xhr = new XMLHttpRequest();
+                    xhr.open("POST", "{% url 'editor:upload_image' %}", true);
+                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    xhr.onload = () => {
+                        if (xhr.status === 200) {
+                            const response = JSON.parse(xhr.responseText);
+                            console.log('Response ' + response.url);
+                            that.quill.insertEmbed(range.index, 'image', response.url, Quill.sources.USER);
+                        }
+                    };
+                    xhr.send(fd);
+                }
+            };
+            input.click();
+        }
+
+    </script>
 {% endblock %}
