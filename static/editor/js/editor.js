@@ -1,7 +1,11 @@
+hljs.configure({   // optionally configure hljs
+  languages: ['javascript', 'c', 'python']
+});
 
 
 let quill = new Quill('#editor-container', {
   modules: {
+      syntax: true,
     toolbar: [
       [{ header: [1, 2, false] }],
       ['bold', 'italic', 'underline'],
@@ -36,21 +40,14 @@ function imageHandler(a, b) {
     input.type = 'file';
 
     input.onchange = e => {
-
-       // getting a hold of the file reference
        var file = e.target.files[0];
-
-       // setting up the reader
        var reader = new FileReader();
-       reader.readAsDataURL(file); // this is reading as data url
+       reader.readAsDataURL(file);
 
-       // here we tell the reader what to do when it's done reading...
        reader.onload = readerEvent => {
-          var content = readerEvent.target.result; // this is the content!
+          var content = readerEvent.target.result;
           that.quill.insertEmbed(range.index, 'image', content, Quill.sources.USER);
        }
-
     };
-
     input.click();
 }
