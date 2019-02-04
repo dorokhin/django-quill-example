@@ -48,13 +48,18 @@ class ImageUploadView(View):
         page = request.GET.get('page')
 
         near_pages = 3
-        next_pages = range(int(page) + 1, paginator.num_pages + 1)[:near_pages]
-        prev_pages = set()
-        page_num = int(page)
-        if page_num > near_pages:
-            prev_pages = set(range(page_num - 1, -paginator.num_pages, -1)[:near_pages])
-            if 1 in prev_pages:
-                prev_pages.remove(1)
+        try:
+            next_pages = range(int(page) + 1, paginator.num_pages + 1)[:near_pages]
+            prev_pages = set()
+            page_num = int(page)
+            if page_num > near_pages:
+                prev_pages = set(range(page_num - 1, -paginator.num_pages, -1)[:near_pages])
+                if 1 in prev_pages:
+                    prev_pages.remove(1)
+        except TypeError as e:
+            prev_pages = None
+            next_pages = None
+            page_num = 1
 
         images = paginator.get_page(page)
         return render(self.request, 'editor/image_list.html', {
