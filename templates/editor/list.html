@@ -13,7 +13,7 @@
                 {% for article in articles %}
                     <tr>
                         <td><a href="{% url 'editor:detail' article.pk %}">{{ article.title }}</a></td>
-                        <td>{{ article.content }}</td>
+                        <td>{{ article.content|safe }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
