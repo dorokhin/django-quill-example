@@ -9,6 +9,8 @@ class Article(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     title = models.CharField(max_length=100)
     content = models.TextField()
+    pub_date = models.DateTimeField(auto_now_add=True, editable=False)
+    updated = models.DateTimeField(auto_now=True)
 
     def get_absolute_url(self):
         return reverse('editor:detail', kwargs={'pk': self.pk})
