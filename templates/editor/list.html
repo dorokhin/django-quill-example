@@ -1,22 +1,39 @@
 {% extends 'editor/base_.html' %}
+{% load static %}
 {% block content %}
-    <div class="ui main text container">
+    <div class="ui main container">
         <h1 class="ui header">Blog post list</h1>
-        <table class="ui purple table">
-            <thead>
-                <tr>
-                    <th>Article title</th>
-                    <th>Content</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for article in articles %}
-                    <tr>
-                        <td><a href="{% url 'editor:detail' article.pk %}">{{ article.title }}</a></td>
-                        <td>{{ article.content|safe }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+
+        <div class="ui divided items">
+            {% for article in articles %}
+                <div class="item">
+                    <div class="image">
+                        <img alt="" src="{% static 'editor/img/image.png' %}">
+                    </div>
+                    <div class="content">
+                        <a class="header" href="{% url 'editor:detail' article.pk %}">{{ article.title }}</a>
+                        <div class="meta">
+                            <span class="ui grey circular label hub">Tech</span>
+                            <div class="ui label"><i class="pencil icon"></i> Author</div>
+                            {% if perms.editor.change_article %}
+                                <a href="{% url 'editor:edit' article.pk %}" class="ui violet basic label">
+                                    <i class="pencil icon"></i>Edit
+                                 </a>
+                            {% endif %}
+                        </div>
+                        <div class="description">
+                            <p>{{ article.content|safe|truncatewords:15 }}</p>
+                        </div>
+                        <div class="extra">
+                            <a class="ui right floated violet button" href="{% url 'editor:detail' article.pk %}">
+                                Read more <i class="right chevron icon"></i>
+                            </a>
+                            <div class="ui label">Tag</div>
+                            <div class="ui label"><i class="globe icon"></i>Additional Tag</div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}
