@@ -24,6 +24,7 @@ class Article(models.Model):
             'em',
             'br',
             'pre',
+            'img',
             'strong',
         ]
         attrs = {

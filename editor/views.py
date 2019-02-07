@@ -4,7 +4,7 @@ from django.utils import timezone
 from .models import Article, Image
 from .forms import ImageUploadForm
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, request
 from django.core.paginator import Paginator
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView
@@ -75,7 +75,14 @@ class ImageUploadView(View):
         form = ImageUploadForm(self.request.POST, self.request.FILES)
         if form.is_valid():
             photo = form.save()
-            data = {'is_valid': True, 'name': photo.file.name, 'url': photo.file.url}
+            data = {
+                'is_valid': True,
+                'name': photo.file.name,
+                'url': request.build_absolute_uri(photo.file.url),
+            }
         else:
-            data = {'is_valid': False, 'errors': form.errors}
+            data = {
+                'is_valid': False,
+                'errors': form.errors,
+            }
         return JsonResponse(data)
