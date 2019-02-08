@@ -1,0 +1,39 @@
+version: "3.5"
+services:
+  db:
+    build:
+      context: ./docker
+      dockerfile: postgresql.Dockerfile
+    env_file:
+      - .env
+    restart: always
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    expose:
+      - "5432"
+
+  nginx:
+    build:
+      context: ./docker
+      dockerfile: nginx.Dockerfile
+    volumes:
+      - django-static:/data
+    ports:
+      - "127.0.0.1:8081:8081"
+    depends_on:
+      - web
+  web:
+    build: .
+    restart: always
+    env_file:
+      - .env
+      - secret.env
+    command: gunicorn --bind 0.0.0.0:8080 --user nginx myeditor.wsgi
+    volumes:
+      - django-static:/data
+    ports:
+      - "127.0.0.1:8080:8080"
+
+volumes:
+  django-static:
+  postgres:
