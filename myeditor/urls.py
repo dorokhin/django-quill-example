@@ -17,7 +17,6 @@ from django.contrib import admin
 from django.urls import path, include
 from editor import urls as editor_urls
 from django.conf import settings
-from django.conf.urls import include
 from django.conf.urls.static import static
 
 urlpatterns = [
