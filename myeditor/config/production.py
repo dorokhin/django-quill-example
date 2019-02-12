@@ -1,7 +1,7 @@
 from .base import *
 
 ALLOWED_HOSTS += (
-        'jan.dorokhin.moscow',
+        'jan.dorokhin.moscow', 'dev.dorokhin.moscow'
     )
 
 DATABASES = {
